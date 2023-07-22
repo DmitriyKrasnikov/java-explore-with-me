@@ -20,6 +20,7 @@ public class StatClient {
     private final String serverUrl;
     private static final String POST_API_PREFIX = "/hit";
     private static final String GET_API_PREFIX = "/stats";
+    private static final String timeFormat = "yyyy-MM-dd HH:mm:ss";
 
     @Autowired
     public StatClient(@Value("${service.url}") String serverUrl, RestTemplateBuilder builder) {
@@ -41,7 +42,7 @@ public class StatClient {
     }
 
     public ResponseEntity<Object> getStatistic(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(timeFormat);
 
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("start", start.format(formatter));

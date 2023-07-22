@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static ru.practicum.ewm.hit.controller.HitController.timeFormat;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -14,14 +16,14 @@ import java.time.LocalDateTime;
 public class Hit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Column(name = "app")
-    String app;
+    private String app;
     @Column(name = "uri")
-    String uri;
+    private String uri;
     @Column(name = "ip")
-    String ip;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String ip;
+    @JsonFormat(pattern = timeFormat)
     @Column(name = "timestamp")
-    LocalDateTime timestamp;
+    private LocalDateTime timestamp;
 }
