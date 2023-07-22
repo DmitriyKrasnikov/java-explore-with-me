@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Transactional(readOnly = true)
 @Slf4j
-public class HitServiceImpl implements HitService{
+public class HitServiceImpl implements HitService {
 
     private final HitRepository hitRepository;
     private final HitMapper hitMapper;
