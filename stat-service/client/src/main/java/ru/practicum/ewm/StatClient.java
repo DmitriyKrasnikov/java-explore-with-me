@@ -20,7 +20,7 @@ public class StatClient {
     private final String serverUrl;
     private static final String POST_API_PREFIX = "/hit";
     private static final String GET_API_PREFIX = "/stats";
-    private static final String timeFormat = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @Autowired
     public StatClient(@Value("${service.url}") String serverUrl, RestTemplateBuilder builder) {

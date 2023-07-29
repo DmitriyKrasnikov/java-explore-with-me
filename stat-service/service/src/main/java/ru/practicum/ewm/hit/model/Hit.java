@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static ru.practicum.ewm.hit.controller.HitController.timeFormat;
+import static ru.practicum.ewm.hit.controller.HitController.DATE_TIME_FORMAT;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +23,7 @@ public class Hit {
     private String uri;
     @Column(name = "ip")
     private String ip;
-    @JsonFormat(pattern = timeFormat)
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
     @Column(name = "timestamp")
     private LocalDateTime timestamp;
 }
