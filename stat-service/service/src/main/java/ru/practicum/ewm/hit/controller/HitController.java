@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.ewm.hit.service.HitService;
 import ru.practicum.ewm.model.EndpointHit;
 import ru.practicum.ewm.model.ViewStats;
@@ -31,15 +32,13 @@ public class HitController {
                                     @DateTimeFormat(pattern = DATE_TIME_FORMAT) LocalDateTime end,
                                     @RequestParam(name = "uris", required = false) List<String> uris,
                                     @RequestParam(name = "unique", defaultValue = "false") Boolean unique) {
+        if (start.isAfter(end)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Field: start after end");
+        }
         if (uris == null) {
             uris = new ArrayList<>();
         }
 
-        List<ViewStats> viewStats = hitService.getStats(start, end, uris, unique);
-        if (viewStats.isEmpty()) {
-            throw new RuntimeException("По данному запросу статистика отсутствует");
-        }
-
-        return viewStats;
+        return hitService.getStats(start, end, uris, unique);
     }
 }

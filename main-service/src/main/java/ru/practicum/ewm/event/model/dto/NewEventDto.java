@@ -5,9 +5,8 @@ import jdk.jfr.BooleanFlag;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.geo.Point;
+import ru.practicum.ewm.event.model.Location;
 
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,7 +30,7 @@ public class NewEventDto {
     @JsonFormat(pattern = DATE_TIME_FORMAT)
     private LocalDateTime eventDate;
     @NotNull
-    private Point location;
+    private Location location;
     @BooleanFlag
     private Boolean paid;
     private Integer participantLimit;

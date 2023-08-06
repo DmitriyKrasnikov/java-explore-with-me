@@ -15,7 +15,7 @@ import static ru.practicum.ewm.StatClient.DATE_TIME_FORMAT;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateEventUserRequest {
+public class UpdateEventAdminRequest {
     @Size(min = 20, max = 2000)
     private String annotation;
     private Integer category;
@@ -29,7 +29,7 @@ public class UpdateEventUserRequest {
     private Integer participantLimit;
     @BooleanFlag
     private Boolean requestModeration;
-    private UserRequestState stateAction;
+    private AdminRequestState stateAction;
     @Size(min = 3, max = 120)
     private String title;
 }
