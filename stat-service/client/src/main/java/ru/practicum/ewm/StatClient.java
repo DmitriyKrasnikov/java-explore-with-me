@@ -20,7 +20,7 @@ import java.util.Map;
 @Slf4j
 public class StatClient {
     private final RestTemplate rest;
-    private final String serverUrl = System.getenv("STAT_SERVICE_URL");;
+    private final String serverUrl = System.getenv("STAT_SERVICE_URL");
     private static final String POST_API_PREFIX = "/hit";
     private static final String GET_API_PREFIX = "/stats";
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
