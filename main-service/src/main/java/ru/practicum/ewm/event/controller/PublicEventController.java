@@ -24,7 +24,7 @@ public class PublicEventController {
 
     private final EventService eventService;
     private final StatClient statClient;
-    private final String APP = "explore with me";
+    private final static String APP = "explore with me";
 
 
     @GetMapping
