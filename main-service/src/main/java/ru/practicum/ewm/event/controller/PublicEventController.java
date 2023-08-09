@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class PublicEventController {
 
-    private final static String APP = "explore with me";
+    private static final String APP = "explore with me";
     private final EventService eventService;
     private final StatClient statClient;
 
