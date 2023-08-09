@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.request.model.dto.ParticipationRequestDto;
 import ru.practicum.ewm.request.service.RequestService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/users/{userId}/requests")
@@ -18,10 +16,9 @@ public class UserRequestController {
     private final RequestService requestService;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getUsersRequest(@PathVariable(name = "userId") Long userId) {
-        List<ParticipationRequestDto> participationRequests = requestService.getUsersRequest(userId);
-
-        return Objects.requireNonNullElseGet(participationRequests, ArrayList::new);
+        return requestService.getUsersRequest(userId);
     }
 
     @PostMapping
@@ -32,6 +29,7 @@ public class UserRequestController {
     }
 
     @PatchMapping("/{requestId}/cancel")
+    @ResponseStatus(HttpStatus.OK)
     public ParticipationRequestDto cancelUserRequest(@PathVariable(name = "userId") Long userId,
                                                      @PathVariable(name = "requestId") Long requestId) {
         return requestService.cancelUserRequest(userId, requestId);

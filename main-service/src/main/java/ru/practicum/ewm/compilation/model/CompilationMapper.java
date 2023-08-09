@@ -2,9 +2,9 @@ package ru.practicum.ewm.compilation.model;
 
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.practicum.ewm.category.model.dto.UpdateCompilationRequest;
 import ru.practicum.ewm.compilation.model.dto.CompilationDto;
 import ru.practicum.ewm.compilation.model.dto.NewCompilationDto;
+import ru.practicum.ewm.compilation.model.dto.UpdateCompilationRequest;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.EventMapper;
 import ru.practicum.ewm.event.repository.EventRepository;

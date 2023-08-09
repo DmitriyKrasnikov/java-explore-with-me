@@ -1,8 +1,8 @@
 package ru.practicum.ewm.compilation.service;
 
-import ru.practicum.ewm.category.model.dto.UpdateCompilationRequest;
 import ru.practicum.ewm.compilation.model.dto.CompilationDto;
 import ru.practicum.ewm.compilation.model.dto.NewCompilationDto;
+import ru.practicum.ewm.compilation.model.dto.UpdateCompilationRequest;
 
 import java.util.List;
 

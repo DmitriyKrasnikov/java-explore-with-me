@@ -8,9 +8,8 @@ import ru.practicum.ewm.user.model.dto.NewUserRequest;
 import ru.practicum.ewm.user.model.dto.UserDto;
 import ru.practicum.ewm.user.service.UserService;
 
-import java.util.ArrayList;
+import javax.validation.constraints.Min;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/admin/users")
@@ -20,9 +19,10 @@ public class AdminUserController {
     private final UserService userService;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<UserDto> getUsers(@RequestParam(name = "ids", required = false) List<Long> users,
-                                  @RequestParam(defaultValue = "0") Integer from,
-                                  @RequestParam(defaultValue = "10") Integer size) {
+                                  @RequestParam(defaultValue = "0") @Min(0) Integer from,
+                                  @RequestParam(defaultValue = "10") @Min(0) Integer size) {
         List<UserDto> userDtoList;
         if (users != null) {
             userDtoList = userService.getUsers(users);
@@ -30,7 +30,7 @@ public class AdminUserController {
             userDtoList = userService.getAllUsers(from, size);
         }
 
-        return Objects.requireNonNullElseGet(userDtoList, ArrayList::new);
+        return userDtoList;
     }
 
     @PostMapping

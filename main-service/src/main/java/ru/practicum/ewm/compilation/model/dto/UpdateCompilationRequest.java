@@ -1,4 +1,4 @@
-package ru.practicum.ewm.category.model.dto;
+package ru.practicum.ewm.compilation.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,8 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateCompilationRequest {
-    List<Long> events;
-    Boolean pinned;
+    private List<Long> events;
+    private Boolean pinned;
     @Size(min = 1, max = 50)
-    String title;
+    private String title;
 }

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import ru.practicum.ewm.event.model.Event;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Data
@@ -25,6 +27,8 @@ public class Compilation {
     private Long id;
     @Column(name = "pinned")
     private Boolean pinned;
+    @NotBlank
+    @Size(min = 1, max = 50)
     @Column(name = "title")
     private String title;
 

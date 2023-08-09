@@ -23,8 +23,6 @@ import java.util.Map;
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         uses = {CategoryMapper.class, UserMapper.class})
 public abstract class EventMapper {
-    //Возможно будет замечание про @AllArgsConstructor, но я так и не смог подружить lombok и mapstruct.
-    //Может ты подскажешь в чём дело)))
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired

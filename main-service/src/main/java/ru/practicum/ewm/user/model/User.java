@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @Entity
@@ -14,9 +17,14 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
+    @NotBlank
+    @Email
+    @Size(min = 6, max = 254)
     @Column(name = "email")
-    String email;
+    private String email;
+    @NotBlank
+    @Size(min = 2, max = 250)
     @Column(name = "name")
-    String name;
+    private String name;
 }

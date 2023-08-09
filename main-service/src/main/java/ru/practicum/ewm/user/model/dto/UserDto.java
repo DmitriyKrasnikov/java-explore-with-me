@@ -11,10 +11,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-    Long id;
+    private Long id;
     @NotBlank
     @Email
-    String email;
+    private String email;
     @NotBlank
-    String name;
+    private String name;
 }

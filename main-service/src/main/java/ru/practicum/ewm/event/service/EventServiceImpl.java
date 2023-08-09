@@ -7,8 +7,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.EventMapper;
 import ru.practicum.ewm.event.model.EventState;
@@ -16,6 +18,7 @@ import ru.practicum.ewm.event.model.dto.*;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.exception.NotFoundException;
+import ru.practicum.ewm.pagination.FromSizePage;
 import ru.practicum.ewm.request.model.ParticipationRequest;
 import ru.practicum.ewm.request.model.ParticipationRequestMapper;
 import ru.practicum.ewm.request.model.RequestState;
@@ -28,6 +31,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.practicum.ewm.exception.ErrorHandler.DATE_TIME_FORMAT;
 
 @Service
 @Slf4j
@@ -44,7 +49,7 @@ public class EventServiceImpl implements EventService {
     public List<EventShortDto> getUsersEvents(Long userId, Integer from, Integer size) {
         log.info("Get users events, user id = {}, from = {}, size = {}", userId, from, size);
 
-        Pageable page = PageRequest.of(from / size, size);
+        Pageable page = FromSizePage.ofFromSize(from, size);
         return eventRepository.findByInitiatorId(userId, page).stream().map(eventMapper::toDto).collect(Collectors.toList());
     }
 
@@ -52,6 +57,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto createUserEvent(Long userId, NewEventDto newEventDto) {
         log.info("Create users events, user id = {}, event annotation = {}", userId, newEventDto.getAnnotation());
+
+        if (newEventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Field: eventDate");
+        }
+
         Event event = eventMapper.toEvent(newEventDto, userId);
         eventRepository.save(event);
         return eventMapper.toFull(event);
@@ -70,6 +80,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto updateUsersEvent(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
         log.info("Update users event, user id = {}, event id = {}, update event = {}", userId, eventId, updateEventUserRequest);
+
+        if (updateEventUserRequest.getEventDate() != null
+                && updateEventUserRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Field: eventDate");
+        }
 
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() ->
                 new NotFoundException(String.format("Event with id=%s was not found", eventId)));
@@ -166,18 +181,22 @@ public class EventServiceImpl implements EventService {
         if (users != null && !users.isEmpty()) {
             spec = spec.and(eventSpecifications.hasUsers(users));
         }
+
         if (states != null && !states.isEmpty()) {
             List<EventState> eventStates = states.stream()
                     .map(EventState::valueOf)
                     .collect(Collectors.toList());
             spec = spec.and(eventSpecifications.hasStates(eventStates));
         }
+
         if (categories != null && !categories.isEmpty()) {
             spec = spec.and(eventSpecifications.hasCategories(categories));
         }
+
         if (rangeStart != null) {
             spec = spec.and(eventSpecifications.hasRangeStart(rangeStart));
         }
+
         if (rangeEnd != null) {
             spec = spec.and(eventSpecifications.hasRangeEnd(rangeEnd));
         }
@@ -196,6 +215,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto updateEvents(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         log.info("Update events, event id = {}, admin request = {}", eventId, updateEventAdminRequest);
+
+        if (updateEventAdminRequest.getEventDate() != null &&
+                updateEventAdminRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Field: eventDate");
+        }
 
         Event event = eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException(String.format("Event with id=%s was not found", eventId)));
@@ -227,26 +251,39 @@ public class EventServiceImpl implements EventService {
                         " onlyAvailable = {}, sort = {}, from = {}, size = {}",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
 
+        if (rangeStart != null && rangeEnd != null) {
+            LocalDateTime startDateTime = LocalDateTime.parse(rangeStart, DATE_TIME_FORMAT);
+            LocalDateTime endDateTime = LocalDateTime.parse(rangeEnd, DATE_TIME_FORMAT);
+            if (startDateTime.isAfter(endDateTime)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "rangeStart must be before rangeEnd");
+            }
+        }
+
         Specification<Event> spec = Specification.where(null);
 
         if (text != null && !text.isEmpty()) {
             spec = spec.and(eventSpecifications.hasText(text));
         }
+
         if (categories != null && !categories.isEmpty()) {
             spec = spec.and(eventSpecifications.hasCategories(categories));
         }
+
         if (paid != null) {
             spec = spec.and(eventSpecifications.isPaid(paid));
         }
+
         if (rangeStart != null) {
             spec = spec.and(eventSpecifications.hasRangeStart(rangeStart));
         } else {
             LocalDateTime now = LocalDateTime.now();
             spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("eventDate"), now));
         }
+
         if (rangeEnd != null) {
             spec = spec.and(eventSpecifications.hasRangeEnd(rangeEnd));
         }
+
         if (onlyAvailable) {
             spec = spec.and(eventSpecifications.isOnlyAvailable(onlyAvailable));
         }
@@ -276,6 +313,7 @@ public class EventServiceImpl implements EventService {
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new NotFoundException(String.format("Event with id=%s was not found", id));
         }
+
         return eventMapper.toFull(event);
     }
 }
