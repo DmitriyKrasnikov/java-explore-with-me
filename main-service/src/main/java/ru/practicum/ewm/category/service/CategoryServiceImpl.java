@@ -1,5 +1,6 @@
 package ru.practicum.ewm.category.service;
 
+import ru.practicum.ewm.category.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +10,6 @@ import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.category.model.CategoryMapper;
 import ru.practicum.ewm.category.model.dto.CategoryDto;
 import ru.practicum.ewm.category.model.dto.NewCategoryDto;
-import ru.practicum.ewm.category.repository.CategoryRepository;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.pagination.FromSizePage;
 

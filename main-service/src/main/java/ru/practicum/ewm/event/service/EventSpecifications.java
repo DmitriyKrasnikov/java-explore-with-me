@@ -26,7 +26,7 @@ public class EventSpecifications {
     }
 
     public Specification<Event> hasCategories(List<Long> categories) {
-        return (root, query, cb) -> root.get("category").get("id").in(categories);
+        return (root, query, cb) -> root.get("ru/practicum/ewm/category").get("id").in(categories);
     }
 
     public Specification<Event> hasRangeStart(String rangeStart) {

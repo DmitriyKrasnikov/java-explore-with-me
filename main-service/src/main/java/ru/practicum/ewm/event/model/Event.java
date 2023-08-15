@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.ewm.category.model.Category;
+import ru.practicum.ewm.comment.model.Comment;
 import ru.practicum.ewm.user.model.User;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -65,6 +67,9 @@ public class Event {
     @Size(min = 3, max = 120)
     @Column(name = "title")
     private String title;
+    @NotNull
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+    List<Comment> comments;
 
     @PrePersist
     @PreUpdate
