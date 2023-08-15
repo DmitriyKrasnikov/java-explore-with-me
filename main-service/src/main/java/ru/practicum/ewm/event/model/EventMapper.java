@@ -17,6 +17,7 @@ import ru.practicum.ewm.user.model.UserMapper;
 import ru.practicum.ewm.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +88,7 @@ public abstract class EventMapper {
         }
         event.setCreatedOn(LocalDateTime.now());
         event.setState(EventState.PENDING);
+        event.setComments(new ArrayList<>());
     }
 
     public abstract void updateEventFromUserRequestDto(UpdateEventUserRequest updateEventUserRequest, @MappingTarget Event event);
