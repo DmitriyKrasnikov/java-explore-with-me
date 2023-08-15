@@ -11,10 +11,9 @@ import ru.practicum.ewm.comment.repository.CommentRepository;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exception.ConflictException;
+import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
-
-import javax.persistence.EntityNotFoundException;
 
 @Mapper(componentModel = "spring")
 public abstract class CommentMapper {
@@ -33,12 +32,12 @@ public abstract class CommentMapper {
 
     protected Event findEventById(Long eventId) {
         return eventRepository.findById(eventId)
-                .orElseThrow(() -> new EntityNotFoundException("Event not found"));
+                .orElseThrow(() -> new NotFoundException("Event not found"));
     }
 
     protected User findUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Mapping(target = "userId", source = "user.id")

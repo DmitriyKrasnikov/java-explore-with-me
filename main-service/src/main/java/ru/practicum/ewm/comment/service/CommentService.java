@@ -7,7 +7,10 @@ import ru.practicum.ewm.comment.model.dto.NewCommentDto;
 import java.util.List;
 
 public interface CommentService {
+
     void adminDeleteComment(Long commentId);
+
+    void userDeleteComment(Long commentId, Long userId);
 
     CommentFullDto createComment(Long eventId, Long userId, NewCommentDto newCommentDto);
 

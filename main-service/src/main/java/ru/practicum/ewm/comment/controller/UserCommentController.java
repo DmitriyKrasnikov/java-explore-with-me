@@ -33,7 +33,8 @@ public class UserCommentController {
 
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteComment(@PathVariable Long commentId) {
-        commentService.adminDeleteComment(commentId);
+    public void deleteComment(@PathVariable(name = "commentId") Long commentId,
+                              @PathVariable(name = "userId") Long userId) {
+        commentService.userDeleteComment(commentId, userId);
     }
 }

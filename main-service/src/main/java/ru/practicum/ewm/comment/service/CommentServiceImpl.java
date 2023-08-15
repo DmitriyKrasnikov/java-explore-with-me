@@ -10,9 +10,11 @@ import ru.practicum.ewm.comment.model.dto.CommentFullDto;
 import ru.practicum.ewm.comment.model.dto.CommentShortDto;
 import ru.practicum.ewm.comment.model.dto.NewCommentDto;
 import ru.practicum.ewm.comment.repository.CommentRepository;
+import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.exception.NotFoundException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +31,19 @@ public class CommentServiceImpl implements CommentService {
     public void adminDeleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
                 new NotFoundException(String.format("Comment with id = %d not found", commentId)));
+
+        commentRepository.delete(comment);
+    }
+
+    @Transactional
+    @Override
+    public void userDeleteComment(Long commentId, Long userId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
+                new NotFoundException(String.format("Comment with id = %d not found", commentId)));
+
+        if (!Objects.equals(comment.getUser().getId(), userId)) {
+            throw new ConflictException(String.format("User id=%s is not creator comment id=%d", userId, commentId));
+        }
 
         commentRepository.delete(comment);
     }
