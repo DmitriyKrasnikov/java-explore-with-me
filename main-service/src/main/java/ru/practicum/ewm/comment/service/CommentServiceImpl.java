@@ -29,6 +29,8 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     @Override
     public void adminDeleteComment(Long commentId) {
+        log.info("Admin delete comment id = {}", commentId);
+
         Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
                 new NotFoundException(String.format("Comment with id = %d not found", commentId)));
 
@@ -38,6 +40,8 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     @Override
     public void userDeleteComment(Long commentId, Long userId) {
+        log.info("User delete comment id = {}", commentId);
+
         Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
                 new NotFoundException(String.format("Comment with id = %d not found", commentId)));
 
@@ -51,6 +55,8 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     @Override
     public CommentFullDto createComment(Long eventId, Long userId, NewCommentDto newCommentDto) {
+        log.info("User id = {} create comment <<{}>> to event id={}", userId, newCommentDto.getContent(), eventId);
+
         return commentMapper.toFull(commentRepository.save(commentMapper.toComment(newCommentDto, eventId, userId)));
 
     }
@@ -58,6 +64,8 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     @Override
     public CommentFullDto updateComment(Long commentId, Long userId, NewCommentDto newCommentDto) {
+        log.info("User id = {} update comment id = {} content: <<{}>> ", userId, commentId, newCommentDto.getContent());
+
         Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
                 new NotFoundException(String.format("Comment with id = %d not found", commentId)));
         commentMapper.updateComment(comment, userId, newCommentDto);
@@ -66,11 +74,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentShortDto> getEventsComment(Long eventId) {
+        log.info("Get events id = {} comments", eventId);
+
         return commentRepository.findByEventId(eventId).stream().map(commentMapper::toShortDto).collect(Collectors.toList());
     }
 
     @Override
     public List<CommentFullDto> getUsersComment(Long eventId, Long userId) {
+        log.info("Get users id = {} comment to event id = {}", userId, eventId);
+
         return commentRepository.findByEventIdAndUserId(eventId, userId).stream().map(commentMapper::toFull).collect(Collectors.toList());
     }
 }
