@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.category.model.dto.CategoryDto;
 import ru.practicum.ewm.category.service.CategoryService;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -18,8 +18,8 @@ public class PublicCategoryController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CategoryDto> getCategories(@RequestParam(name = "from", defaultValue = "0") @Min(0) Integer from,
-                                           @RequestParam(name = "size", defaultValue = "10") @Min(0) Integer size) {
+    public List<CategoryDto> getCategories(@RequestParam(name = "from", defaultValue = "0") @PositiveOrZero Integer from,
+                                           @RequestParam(name = "size", defaultValue = "10") @PositiveOrZero Integer size) {
         return categoryService.getCategories(from, size);
     }
 

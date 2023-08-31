@@ -8,6 +8,7 @@ import ru.practicum.ewm.StatClient;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.category.model.CategoryMapper;
 import ru.practicum.ewm.category.repository.CategoryRepository;
+import ru.practicum.ewm.comment.model.CommentMapper;
 import ru.practicum.ewm.event.model.dto.*;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.request.model.RequestState;
@@ -16,12 +17,13 @@ import ru.practicum.ewm.user.model.UserMapper;
 import ru.practicum.ewm.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        uses = {CategoryMapper.class, UserMapper.class})
+        uses = {CategoryMapper.class, UserMapper.class, CommentMapper.class})
 public abstract class EventMapper {
     @Autowired
     private CategoryRepository categoryRepository;
@@ -36,6 +38,7 @@ public abstract class EventMapper {
     @Mapping(source = "event.initiator", target = "initiator")
     @Mapping(target = "confirmedRequests", expression = "java(getConfirmedRequests(event))")
     @Mapping(target = "views", expression = "java(getViews(event))")
+    @Mapping(target = "comments", source = "event.comments")
     public abstract EventFullDto toFull(Event event);
 
     @Mapping(target = "confirmedRequests", expression = "java(getConfirmedRequests(event))")
@@ -85,6 +88,7 @@ public abstract class EventMapper {
         }
         event.setCreatedOn(LocalDateTime.now());
         event.setState(EventState.PENDING);
+        event.setComments(new ArrayList<>());
     }
 
     public abstract void updateEventFromUserRequestDto(UpdateEventUserRequest updateEventUserRequest, @MappingTarget Event event);
