@@ -21,8 +21,8 @@
 
 ## Спецификация API
 Оба сервиса выполнены согласно данным спецификациям API:
-- спецификация основного сервиса: ewm-main-service-spec.json;
-- спецификация сервиса статистики: ewm-stats-service.json.
+- спецификация основного сервиса: [ewm-main-service-spec.json;](https://raw.githubusercontent.com/yandex-praktikum/java-explore-with-me/main/ewm-main-service-spec.json)
+- спецификация сервиса статистики: [ewm-stats-service.json.](https://raw.githubusercontent.com/yandex-praktikum/java-explore-with-me/main/ewm-stats-service-spec.json)
 
 ## Аутентификация и авторизация
 С внешним миром сервисы связывает сетевой шлюз. Он контактирует с системой аутентификации и авторизации, а затем перенаправляет запрос в сервисы. То есть, если шлюз пропустил запрос к закрытой или административной части API, значит, этот запрос успешно прошел аутентификацию и авторизацию.
